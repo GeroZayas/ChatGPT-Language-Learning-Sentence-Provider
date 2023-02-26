@@ -10,6 +10,8 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # ----------------------------------------------------------------
 
+# TODO: save generated answers in txt file or excel or so
+
 import openai
 
 openai.api_key = OPENAI_API_KEY
