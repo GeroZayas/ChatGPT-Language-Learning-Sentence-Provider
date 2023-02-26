@@ -2,6 +2,7 @@ import os
 import time
 from rich import print
 
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,7 +39,15 @@ print("-" * 60)
 
 program_run = True
 
-print(languages)
+print("Choose your language: ")
+for lang, code in languages.items():
+    print(
+        f"""
+          {lang:<7} ->> {code}"""
+    )
+
+print()  # blank line
+
 lang = input("Language: ")
 
 for language, language_code in languages.items():
