@@ -1,7 +1,6 @@
 import os
 import time
 from rich import print
-import asyncio
 
 
 from dotenv import load_dotenv
@@ -74,6 +73,9 @@ while program_run:
 
     prompt = input("Insert word or phrase: \n>>> ")
     prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and give me {num_of_phrases} long sentences  in {lang} with this word or phrase: '{prompt}' so I can learn it very well"
+
+    waiting_for_answer_animation()
+
     response = generate_response(prompt)
 
     print()
