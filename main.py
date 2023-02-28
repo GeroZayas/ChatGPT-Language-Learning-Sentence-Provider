@@ -1,6 +1,7 @@
 import os
 import time
 from rich import print
+import asyncio
 
 
 from dotenv import load_dotenv
@@ -18,11 +19,23 @@ import openai
 openai.api_key = OPENAI_API_KEY
 
 
+# ----------------------------------------------------------------
+def waiting_for_answer_animation():
+    """This function prints a message for the user to know that the
+    answer is coming and the program is running. It uses time.sleep() to
+    create a simple animation of every character in the string.
+    """
+    wait_string = "Your answer is coming..."
+    for character in wait_string:
+        print(character, end="")
+        time.sleep(0.1)
+
+
 def generate_response(prompt):
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
-        max_tokens=200,
+        max_tokens=1000,
         n=1,
         stop=None,
         temperature=0.5,
@@ -62,6 +75,9 @@ while program_run:
     prompt = input("Insert word or phrase: \n>>> ")
     prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and give me {num_of_phrases} long sentences  in {lang} with this word or phrase: '{prompt}' so I can learn it very well"
     response = generate_response(prompt)
+
+    print()
+
     print(f"[bold yellow]{response}[/bold yellow]")
 
     print("-" * 60)
