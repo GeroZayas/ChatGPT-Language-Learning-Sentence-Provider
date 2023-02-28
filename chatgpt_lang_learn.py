@@ -26,16 +26,20 @@ def waiting_for_answer_animation(stop_event):
     create a simple animation of every character in the string.
     """
     counter = 0
-    wait_string = "."
-    while not stop_event.is_set():
-        for char in wait_string:
-            if counter == 79:
-                counter = 0
-                print("\n")
-            print(char, end="")
-            counter += 1
-            time.sleep(0.1)
+    wait_string = "answer is coming..."
+    for letter in wait_string:
+        print(f"[bold red]{letter}[/bold red]", end="")
+        time.sleep(0.1)
+        # while not stop_event.is_set():
+        #     for char in wait_string:
+        #         if counter == 79:
+        #             counter = 0
+        #             print("\n")
+        #         counter += 1
+        #         print(char, end="")
+        #         time.sleep(0.2)
         time.sleep(0.01)
+    print()
 
 
 def generate_response(prompt):
@@ -68,13 +72,19 @@ for lang, code in languages.items():
 
 print()  # blank line
 
-lang = input("Language: ")
 
-for language, language_code in languages.items():
-    if language_code == lang:
-        lang = language
+def ask_for_language():
+    lang = input("Language: ")
+
+    for language, language_code in languages.items():
+        if language_code == lang:
+            lang = language
+
+    return lang
+
 
 while program_run:
+    lang = ask_for_language()
     num_of_phrases = input("How many sentences (hit ENTER for default = 3): ")
     if len(num_of_phrases) == 0:
         num_of_phrases = 3
@@ -122,11 +132,23 @@ while program_run:
 
     print("-" * 60)
 
-    user_quit = input('Hit >>> ENTER to continue or >>> "q" to quit\n\n')
+    # FIXME: when user selects 'c' make it continue with the same language, not offer change it
+    # FIXME: the whole selection thing is not working well
+    user_choice = input('Hit >>> "c" to continue or >>> "h" for help\n\n')
 
-    if user_quit == "q":
+    if user_choice == "q":
         print()
         break
+    elif user_choice == "h":
+        print(
+            """
+              Insert: "change" to change language
+              Insert: "q" to quit program
+              """
+        )
+        user_choice = input(">>> ")
+        if user_choice == "change":
+            program_run = True
 
 bye_string = "\nThis program is finished now. Have a great day"
 
