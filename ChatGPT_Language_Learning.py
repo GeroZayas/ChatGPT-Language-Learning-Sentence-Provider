@@ -15,8 +15,10 @@ def main():
 
     # ----------------------------------------------------------------
 
-    # TODO: save generated answers in txt file or excel or so
+    # TODO offer user a) generation of long sentences b) noun phrases for words
+    # TODO c) most common collocations with the word
 
+    # TODO save generated answers in txt file or excel or so
     openai.api_key = OPENAI_API_KEY
 
     # ----------------------------------------------------------------
@@ -70,7 +72,7 @@ def main():
         for lang, code in languages.items():
             print(
                 f"""
-                {lang:<7} ->> {code}"""
+                {lang:<11} ->> {code}"""
             )
 
     print_list_languages()
@@ -88,6 +90,32 @@ def main():
 
         return lang
 
+    def generator_choice():
+        gen_opt = {
+            "Noun Phrases": "np",
+            "Long Sentences": "ls",
+            "Common Collocations": "cc",
+        }
+
+        print(
+            """
+              Select what you want to generate:
+              """
+        )
+
+        for k, v in gen_opt.items():
+            print("-" * 60)  # terminal separator
+            print(f"For '{k}' insert '{v}'")
+
+        print("-" * 60)  # terminal separator
+
+        user_gen_opt = input(">>> ")
+        for k, v in gen_opt.items():
+            if user_gen_opt == v:
+                user_gen_opt = k
+
+        return user_gen_opt
+
     lang = ask_for_language()
 
     program_run = True
@@ -95,10 +123,14 @@ def main():
     while program_run:
         print()  # space
 
+        gen_opt = generator_choice()
+
+        print()  # space
+
         print(
             "[bold light_sea_green]Selected Language: [/bold light_sea_green]", end=""
         )
-        print(f"[bold yellow]{lang}[/bold yellow]\n")
+        print(f"[bold yellow]'{gen_opt}' in {lang}[/bold yellow]\n")
 
         num_of_phrases = input("How many sentences (hit ENTER for default = 3): ")
 
@@ -107,7 +139,7 @@ def main():
 
         print()  # space
         prompt = input("Insert word or phrase: \n>>> ")
-        prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and give me {num_of_phrases} long sentences  in {lang} with this word or phrase: '{prompt}' so I can learn it very well"
+        prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{prompt}' so I can learn it very well."
 
         # waiting_for_answer_animation()
 
