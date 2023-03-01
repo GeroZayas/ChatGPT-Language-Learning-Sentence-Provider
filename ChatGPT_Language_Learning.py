@@ -15,9 +15,6 @@ def main():
 
     # ----------------------------------------------------------------
 
-    # TODO offer user a) generation of long sentences b) noun phrases for words
-    # TODO c) most common collocations with the word
-
     # TODO save generated answers in txt file or excel or so
     openai.api_key = OPENAI_API_KEY
 
