@@ -2,7 +2,7 @@ import os
 import time
 from rich import print
 import threading
-
+import pyperclip
 
 from dotenv import load_dotenv
 
@@ -54,21 +54,33 @@ def generate_response(prompt):
     return response.choices[0].text.strip()
 
 
-languages = {"Catalan": "ca", "English": "en", "German": "de"}
+languages = {
+    "Catalan": "ca",
+    "English": "en",
+    "German": "de",
+    "Spanish": "sp",
+    "Portuguese": "pt",
+    "Italian": "it",
+}
 
 print("-" * 60)
 
 # ----------------------------------------------------------------
 # MAIN LOOP
 
-program_run = True
 
-print("Choose your language: ")
-for lang, code in languages.items():
-    print(
-        f"""
-          {lang:<7} ->> {code}"""
-    )
+def print_list_languages():
+    for lang, code in languages.items():
+        print(
+            f"""
+            {lang:<7} ->> {code}"""
+        )
+
+
+print_list_languages()
+
+print("\nChoose your language: ")
+
 
 print()  # blank line
 
@@ -83,12 +95,22 @@ def ask_for_language():
     return lang
 
 
+lang = ask_for_language()
+
+program_run = True
+
 while program_run:
-    lang = ask_for_language()
+    print()  # space
+
+    print("[bold light_sea_green]Selected Language: [/bold light_sea_green]", end="")
+    print(f"[bold yellow]{lang}[/bold yellow]\n")
+
     num_of_phrases = input("How many sentences (hit ENTER for default = 3): ")
+
     if len(num_of_phrases) == 0:
         num_of_phrases = 3
 
+    print()  # space
     prompt = input("Insert word or phrase: \n>>> ")
     prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and give me {num_of_phrases} long sentences  in {lang} with this word or phrase: '{prompt}' so I can learn it very well"
 
@@ -103,6 +125,8 @@ while program_run:
             print(f"[bold yellow]{response}[/bold yellow]")
             print()
             stop_event.set()
+            pyperclip.copy(response)
+            print("Text copied to clipboard!")
         except Exception:
             print("Something went wrong!")
 
@@ -119,6 +143,7 @@ while program_run:
     thread2 = threading.Thread(target=response_func, args=(stop_event,))
 
     # Start both threads
+    print()  # blank line - space
     thread1.start()
     thread2.start()
 
@@ -132,29 +157,30 @@ while program_run:
 
     print("-" * 60)
 
-    # FIXME: when user selects 'c' make it continue with the same language, not offer change it
-    # FIXME: the whole selection thing is not working well
-    user_choice = input('Hit >>> "c" to continue or >>> "h" for help\n\n')
+    user_choice = input('Hit >>> "ENTER" to continue or >>> "op" for more options\n\n')
 
-    if user_choice == "q":
-        print()
-        break
-    elif user_choice == "h":
+    if user_choice == "op":
         print(
             """
-              Insert: "change" to change language
+              Insert: "ch" to change language
               Insert: "q" to quit program
               """
         )
         user_choice = input(">>> ")
-        if user_choice == "change":
+        if user_choice == "ch":
+            print_list_languages()
+            lang = ask_for_language()
             program_run = True
+        elif user_choice == "q":
+            program_run = False
 
 bye_string = "\nThis program is finished now. Have a great day"
 
+counter = 10
 for word in bye_string.split():
     print()
-    print("          " + word)
-    time.sleep(0.2)
+    print(" " * counter, f"[bold deep_sky_blue3]{word}[/bold deep_sky_blue3]")
+    counter += 4
+    time.sleep(0.15)
 
 time.sleep(1)
