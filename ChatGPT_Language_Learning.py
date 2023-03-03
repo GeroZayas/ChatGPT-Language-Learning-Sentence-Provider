@@ -28,16 +28,7 @@ def main():
         wait_string = "answer is coming..."
         for letter in wait_string:
             print(f"[bold red]{letter}[/bold red]", end="")
-            time.sleep(0.1)
-            # while not stop_event.is_set():
-            #     for char in wait_string:
-            #         if counter == 79:
-            #             counter = 0
-            #             print("\n")
-            #         counter += 1
-            #         print(char, end="")
-            #         time.sleep(0.2)
-            # time.sleep(0.01)
+            time.sleep(0.5)
         print()
 
     def generate_response(prompt):
@@ -90,8 +81,8 @@ def main():
     def generator_choice():
         gen_opt = {
             "Noun Phrases": "np",
-            "Long Sentences": "ls",
             "Common Collocations": "cc",
+            "Long Sentences": "ls",
         }
 
         print(
@@ -129,13 +120,24 @@ def main():
         )
         print(f"[bold yellow]'{gen_opt}' in {lang}[/bold yellow]\n")
 
-        num_of_phrases = input("How many sentences (hit ENTER for default = 3): ")
+        num_of_phrases = int(
+            input("How many sentences (default np & cc = 10, ls = 3): ") or "0"
+        )
 
-        if len(num_of_phrases) == 0:
-            num_of_phrases = 3
+        if num_of_phrases == 0:
+            if gen_opt == "Long Sentences":
+                num_of_phrases = 3
+            elif gen_opt == "Noun Phrases" or gen_opt == "Common Collocations":
+                num_of_phrases = 10
+
+        print("This is num of phrases: ", num_of_phrases)
 
         print()  # space
         prompt = input("Insert word or phrase: \n>>> ")
+
+        if prompt == "":
+            prompt = "It is important to..."
+
         prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{prompt}' so I can learn it very well."
 
         # waiting_for_answer_animation()
