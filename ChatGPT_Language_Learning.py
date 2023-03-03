@@ -28,7 +28,7 @@ def main():
         wait_string = "answer is coming..."
         for letter in wait_string:
             print(f"[bold red]{letter}[/bold red]", end="")
-            time.sleep(0.5)
+            time.sleep(0.05)
         print()
 
     def generate_response(prompt):
