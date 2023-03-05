@@ -126,21 +126,22 @@ def main():
         )
         print(f"[bold yellow]'{gen_opt}' in {lang}[/bold yellow]\n")
 
-        num_of_phrases = int(
-            input("How many sentences (default np & cc = 10, ls = 3): ") or "0"
-        )
+        if not gen_opt == "Short Story":
+            num_of_phrases = int(
+                input("How many sentences (default np & cc = 10, ls = 3): ") or "0"
+            )
 
-        if num_of_phrases == 0:
-            if gen_opt == "Long Sentences":
-                num_of_phrases = 3
-            elif gen_opt == "Noun Phrases" or gen_opt == "Common Collocations":
-                num_of_phrases = 10
-            elif gen_opt == "Verb Conjugation":
-                num_of_phrases = 6
-            elif gen_opt == "Short Story":
-                num_of_phrases = "Varied (short story) :)"
+            if num_of_phrases == 0:
+                if gen_opt == "Long Sentences":
+                    num_of_phrases = 3
+                elif gen_opt == "Noun Phrases" or gen_opt == "Common Collocations":
+                    num_of_phrases = 10
+                elif gen_opt == "Verb Conjugation":
+                    num_of_phrases = 6
+                elif gen_opt == "Short Story":
+                    num_of_phrases = "Varied (short story) :)"
 
-        print("This is num of phrases: ", num_of_phrases)
+            print("This is num of phrases: ", num_of_phrases)
 
         print()  # space
 
