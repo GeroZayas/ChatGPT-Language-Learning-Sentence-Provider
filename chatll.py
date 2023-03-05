@@ -1,3 +1,3 @@
-from ChatGPT_Language_Learning import main
+from OpenAI_Language_Learning_Assistant import main
 
 main()
