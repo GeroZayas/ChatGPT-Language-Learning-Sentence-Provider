@@ -1,0 +1,12 @@
+Add implementation:
+
+* Conjugate verbs in different tenses
+
+we need: 
+- option for the user to choose - Conjugate verbs
+- option for the user to choose - Tense of conjugation
+- Generate sentences with those conjugations
+
+---------
+Notes:
+I thik it would be better to divide the code into classes and objects

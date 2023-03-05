@@ -14,8 +14,13 @@ def main():
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
     # ----------------------------------------------------------------
+    # * TODOS AND IDEAS *
+    # new implementation idea: add option of `conjugating verbs`
+    # in different tenses
 
-    # TODO save generated answers in txt file or excel or so
+    # *idea: save generated answers in txt file or excel or so
+
+    # ----------------------------------------------------------------
     openai.api_key = OPENAI_API_KEY
 
     # ----------------------------------------------------------------
