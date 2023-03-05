@@ -2,6 +2,9 @@
 
 This program uses the OpenAI API to generate responses for language learning purposes. The user inputs a language and a word, phrase, or verb they want to learn more about, and the program generates responses in that language. The user can choose between different types of responses depending on their learning goals, such as noun phrases, verb conjugation, and short stories.
 
+### Required:
+`OPENAI API KEY`
+
 ### Installation and Dependencies
 
 This program requires Python 3.6 or above and the following dependencies:
