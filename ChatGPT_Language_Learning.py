@@ -15,8 +15,6 @@ def main():
 
     # ----------------------------------------------------------------
     # * TODOS AND IDEAS *
-    # new implementation idea: add option of `conjugating verbs`
-    # in different tenses
 
     # *idea: save generated answers in txt file or excel or so
 
@@ -88,6 +86,9 @@ def main():
             "Noun Phrases": "np",
             "Common Collocations": "cc",
             "Long Sentences": "ls",
+            # Add verb conjugation option
+            "Verb Conjugation": "vc",
+            "Short Story": "ss",
         }
 
         print(
@@ -134,16 +135,38 @@ def main():
                 num_of_phrases = 3
             elif gen_opt == "Noun Phrases" or gen_opt == "Common Collocations":
                 num_of_phrases = 10
+            elif gen_opt == "Verb Conjugation":
+                num_of_phrases = 6
+            elif gen_opt == "Short Story":
+                num_of_phrases = "Varied (short story) :)"
 
         print("This is num of phrases: ", num_of_phrases)
 
         print()  # space
-        prompt = input("Insert word or phrase: \n>>> ")
 
-        if prompt == "":
-            prompt = "It is important to..."
+        if gen_opt == "Short Story":
+            user_prompt = input(
+                "\nInsert words or phrases to include in the story: \n>>> "
+            )
+            user_prompt = user_prompt.strip().split()
+            user_prompt = " ".join(user_prompt)
+            print("\nMaking a story with these elements: ", user_prompt)
+        else:
+            user_prompt = input("\nInsert word, phrase or verb: \n>>> ")
 
-        prompt += f"Act as if you were an amazing teacher of {lang} and you are teaching me this language and now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{prompt}' so I can learn it very well."
+        if user_prompt == "":
+            user_prompt = "It is important to..."
+
+        if gen_opt == "Verb Conjugation":
+            tense = input("\nConjugation tense? \n>>> ")
+
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Conjugate this verb: '{user_prompt}' in {tense} and give me an example medium-large sentence for each personal pronoun, please. Make sure everything you give me is in {lang}"
+
+        elif gen_opt == "Short Story":
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and an excellent storyteller and you are teaching me this language. Use these words: '{user_prompt}'and create an interesting and fun short story that includes them. Make sure everything you give me is in {lang}"
+
+        else:
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
 
         # waiting_for_answer_animation()
 
@@ -151,7 +174,7 @@ def main():
 
         def response_func(stop_event):
             try:
-                response = generate_response(prompt)
+                response = generate_response(chat_prompt)
                 print()
                 print(f"[bold yellow]{response}[/bold yellow]")
                 print()
