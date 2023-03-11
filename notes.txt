@@ -1,4 +1,7 @@
 Add implementation:
+* Be able to see results in a webpage -  Fast Api
+
+* Add questions mode 
 
 ---------
 Notes:

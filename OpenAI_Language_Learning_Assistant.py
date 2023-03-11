@@ -4,6 +4,7 @@ from rich import print
 import threading
 import pyperclip
 import openai
+import pyinputplus as pyip
 
 from dotenv import load_dotenv
 
@@ -86,9 +87,9 @@ def main():
             "Noun Phrases": "np",
             "Common Collocations": "cc",
             "Long Sentences": "ls",
-            # Add verb conjugation option
             "Verb Conjugation": "vc",
             "Short Story": "ss",
+            "Questions": "q",
         }
 
         print(
@@ -127,14 +128,21 @@ def main():
         print(f"[bold yellow]'{gen_opt}' in {lang}[/bold yellow]\n")
 
         if not gen_opt == "Short Story":
-            num_of_phrases = int(
-                input("How many sentences (default np & cc = 10, ls = 3): ") or "0"
+            num_of_phrases = (
+                pyip.inputNum(
+                    "How many sentences (default np & cc = 10, ls = 3): ", blank=True
+                )
+                or 0
             )
 
             if num_of_phrases == 0:
                 if gen_opt == "Long Sentences":
                     num_of_phrases = 3
-                elif gen_opt == "Noun Phrases" or gen_opt == "Common Collocations":
+                elif gen_opt in [
+                    "Common Collocations",
+                    "Noun Phrases",
+                    "Questions",
+                ]:
                     num_of_phrases = 10
                 elif gen_opt == "Verb Conjugation":
                     num_of_phrases = 6
