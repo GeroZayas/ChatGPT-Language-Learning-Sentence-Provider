@@ -11,7 +11,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def main():
+def main(language=None, type_generation=None, num_phrases=None, prompt=None):
+    if language is not None:
+        print(f"Language is {language}")
+    if type_generation is not None:
+        print(f"Type of generation is {type_generation}")
+    if num_phrases is not None:
+        print(f"Number of phrases (etc.) is {num_phrases}")
+    if prompt is not None:
+        print(f"Prompt is {prompt}")
+
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
     # ----------------------------------------------------------------
@@ -60,21 +69,24 @@ def main():
     # ----------------------------------------------------------------
     # MAIN LOOP
 
-    def print_list_languages():
-        for lang, code in languages.items():
-            print(
-                f"""
-                {lang:<11} ->> {code}"""
-            )
+    if language is None:
 
-    print_list_languages()
+        def print_list_languages():
+            for lang, code in languages.items():
+                print(
+                    f"""
+                    {lang:<11} ->> {code}"""
+                )
 
-    print("\nChoose your language: ")
+        print_list_languages()
+
+        print("\nChoose your language: ")
 
     print()  # blank line
 
-    def ask_for_language():
-        lang = input("Language: ")
+    def ask_for_language(language=language):
+        if language is None:
+            lang = input("Language: ")
 
         for language, language_code in languages.items():
             if language_code == lang:
@@ -111,14 +123,22 @@ def main():
 
         return user_gen_opt
 
-    lang = ask_for_language()
+    lang = ""
+    if language is None:
+        lang = ask_for_language()
+    else:
+        lang = language
 
     program_run = True
 
     while program_run:
         print()  # space
 
-        gen_opt = generator_choice()
+        gen_opt = ""
+        if type_generation is None:
+            gen_opt = generator_choice()
+        else:
+            gen_opt = type_generation
 
         print()  # space
 
@@ -127,44 +147,53 @@ def main():
         )
         print(f"[bold yellow]'{gen_opt}' in {lang}[/bold yellow]\n")
 
-        if not gen_opt == "Short Story":
-            num_of_phrases = (
-                pyip.inputNum(
-                    "How many sentences (default np & cc = 10, ls = 3): ", blank=True
+        num_of_phrases = 0
+
+        if num_phrases is None:
+            if not gen_opt == "Short Story":
+                num_of_phrases = (
+                    pyip.inputNum(
+                        "How many sentences (default np & cc = 10, ls = 3): ",
+                        blank=True,
+                    )
+                    or 0
                 )
-                or 0
-            )
 
-            if num_of_phrases == 0:
-                if gen_opt == "Long Sentences":
-                    num_of_phrases = 3
-                elif gen_opt in [
-                    "Common Collocations",
-                    "Noun Phrases",
-                    "Questions",
-                ]:
-                    num_of_phrases = 10
-                elif gen_opt == "Verb Conjugation":
-                    num_of_phrases = 6
-                elif gen_opt == "Short Story":
-                    num_of_phrases = "Varied (short story) :)"
+                if num_of_phrases == 0:
+                    if gen_opt == "Long Sentences":
+                        num_of_phrases = 3
+                    elif gen_opt in [
+                        "Common Collocations",
+                        "Noun Phrases",
+                        "Questions",
+                    ]:
+                        num_of_phrases = 10
+                    elif gen_opt == "Verb Conjugation":
+                        num_of_phrases = 6
+                    elif gen_opt == "Short Story":
+                        num_of_phrases = "Varied (short story) :)"
 
-            print("This is num of phrases: ", num_of_phrases)
+                print("This is num of phrases: ", num_of_phrases)
+
+        else:
+            num_of_phrases = num_phrases
 
         print()  # space
 
-        if gen_opt == "Short Story":
-            user_prompt = input(
-                "\nInsert words or phrases to include in the story: \n>>> "
-            )
-            user_prompt = user_prompt.strip().split()
-            user_prompt = " ".join(user_prompt)
-            print("\nMaking a story with these elements: ", user_prompt)
-        else:
-            user_prompt = input("\nInsert word, phrase or verb: \n>>> ")
+        user_prompt = ""
 
-        if user_prompt == "":
-            user_prompt = "It is important to..."
+        if prompt is not None:
+            user_prompt = prompt
+        else:
+            if gen_opt == "Short Story":
+                user_prompt = input(
+                    "\nInsert words or phrases to include in the story: \n>>> "
+                )
+                user_prompt = user_prompt.strip().split()
+                user_prompt = " ".join(user_prompt)
+                print("\nMaking a story with these elements: ", user_prompt)
+            else:
+                user_prompt = input("\nInsert word, phrase or verb: \n>>> ")
 
         if gen_opt == "Verb Conjugation":
             tense = input("\nConjugation tense? \n>>> ")
