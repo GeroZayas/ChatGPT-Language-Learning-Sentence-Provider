@@ -195,6 +195,10 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None):
             else:
                 user_prompt = input("\nInsert word, phrase or verb: \n>>> ")
 
+        # ----------------------------------------------------------------
+        # CHANGE THE PROMPT FOR CHATGPT ACCORDING
+        # TO USER TYPE OF GENERATION CHOICE
+
         if gen_opt == "Verb Conjugation":
             tense = input("\nConjugation tense? \n>>> ")
 
@@ -202,6 +206,9 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None):
 
         elif gen_opt == "Short Story":
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and an excellent storyteller and you are teaching me this language. Use these words: '{user_prompt}'and create an interesting and fun short story that includes them. Make sure everything you give me is in {lang}"
+
+        elif gen_opt == "Questions":
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and  practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
 
         else:
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
