@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def main(language=None, type_generation=None, num_phrases=None, prompt=None):
+def main(language=None, type_generation=None, num_phrases=None, prompt=None, loop=None):
     if language is not None:
         print(f"Language is {language}")
     if type_generation is not None:
@@ -217,6 +217,8 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None):
 
         # response = generate_response(prompt)
 
+        final_response = ""
+
         def response_func(stop_event):
             try:
                 response = generate_response(chat_prompt)
@@ -225,6 +227,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None):
                 print()
                 stop_event.set()
                 pyperclip.copy(response)
+                final_response = response
                 print("Text copied to clipboard!")
             except Exception:
                 print("Something went wrong!")
@@ -258,35 +261,41 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None):
 
         print("-" * 60)
 
-        user_choice = input(
-            'Hit >>> "ENTER" to continue or >>> "op" for more options\n\n'
-        )
-
-        if user_choice == "op":
-            print(
-                """
-                Insert: "ch" to change language
-                Insert: "q" to quit program
-                """
+        if loop == "no":
+            program_run = False
+        else:
+            user_choice = input(
+                'Hit >>> "ENTER" to continue or >>> "op" for more options\n\n'
             )
-            user_choice = input(">>> ")
-            if user_choice == "ch":
-                print_list_languages()
-                lang = ask_for_language()
-                program_run = True
-            elif user_choice == "q":
-                program_run = False
 
-    bye_string = "\nThis program is finished now. Have a great day"
+            if user_choice == "op":
+                print(
+                    """
+                    Insert: "ch" to change language
+                    Insert: "q" to quit program
+                    """
+                )
+                user_choice = input(">>> ")
+                if user_choice == "ch":
+                    print_list_languages()
+                    lang = ask_for_language()
+                    program_run = True
+                elif user_choice == "q":
+                    program_run = False
 
-    counter = 10
-    for word in bye_string.split():
-        print()
-        print(" " * counter, f"[bold deep_sky_blue3]{word}[/bold deep_sky_blue3]")
-        counter += 4
-        time.sleep(0.15)
+    if loop != "no":
+        bye_string = "\nThis program is finished now. Have a great day"
 
-    time.sleep(1)
+        counter = 10
+        for word in bye_string.split():
+            print()
+            print(" " * counter, f"[bold deep_sky_blue3]{word}[/bold deep_sky_blue3]")
+            counter += 4
+            time.sleep(0.15)
+
+        time.sleep(1)
+
+    return str(final_response)
 
 
 if __name__ == "__main__":
