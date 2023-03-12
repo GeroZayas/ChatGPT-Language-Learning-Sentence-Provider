@@ -22,19 +22,15 @@ parser.add_argument(
     "-tg",
     "--type-generation",
     type=str,
-    default="Long Sentences",
     help="Choose between Noun Phrases, Short Story, Common Collocations, Long Sentences, Verb Conjugation and Questions",
 )
 parser.add_argument(
     "-n",
-    "--number_phrases",
+    "--number-phrases",
     type=int,
-    default=3,
     help="How many phrases, question, etc. do you want?",
 )
-parser.add_argument(
-    "-p", "--prompt", default="It is important", help="What is the prompt?"
-)
+parser.add_argument("-p", "--prompt", help="What is the prompt?")
 parser.add_argument(
     "-loop", default="yes", help="Choose if you want one answer or multiple ones"
 )
