@@ -152,7 +152,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         num_of_phrases = 0
 
         if num_phrases is None:
-            if not gen_opt == "Short Story":
+            if not gen_opt in ("Short Story", "Translate"):
                 num_of_phrases = (
                     pyip.inputNum(
                         "How many sentences (default np & cc = 10, ls = 3): ",
