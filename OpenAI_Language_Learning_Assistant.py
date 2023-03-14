@@ -102,6 +102,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             "Verb Conjugation": "vc",
             "Short Story": "ss",
             "Questions": "q",
+            "Translate": "t",
         }
 
         print(
@@ -113,6 +114,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         for k, v in gen_opt.items():
             print("-" * 60)  # terminal separator
             print(f"For '{k}' insert '{v}'")
+            time.sleep(0.1)
 
         print("-" * 60)  # terminal separator
 
@@ -209,6 +211,11 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         elif gen_opt == "Questions":
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and  practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
+
+        elif gen_opt == "Translate":
+            target_lang = input("Insert target language\n>>> ")
+
+            chat_prompt = f"Act as if you were an amazing teacher and translator of {lang} and you are teaching me this language. Traslate these words or phrases into {target_lang}: '{user_prompt}' and give me 2 sentences examples sentences, first in {lang} and then in {target_lang}."
 
         else:
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
