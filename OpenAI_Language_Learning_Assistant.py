@@ -213,7 +213,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and  practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
 
         elif gen_opt == "Translate":
-            target_lang = input("Insert target language\n>>> ")
+            target_lang = input("\nInsert target language\n>>> ")
 
             chat_prompt = f"Act as if you were an amazing teacher and translator of {lang} and you are teaching me this language. Traslate these words or phrases into {target_lang}: '{user_prompt}' and give me 2 sentences examples sentences, first in {lang} and then in {target_lang}."
 
