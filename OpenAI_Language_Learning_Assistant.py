@@ -2,16 +2,31 @@ import os
 import time
 from rich import print
 import threading
+
+# A module that allows you to copy text to the clipboard.
 import pyperclip
+
 import openai
+
+# A module that allows you to validate user input.
 import pyinputplus as pyip
 
+# Loading the environment variables from the .env file.
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 def main(language=None, type_generation=None, num_phrases=None, prompt=None, loop=None):
+    """
+    It prints out the values of the arguments passed to it
+
+    :param language: The language to use
+    :param type_generation:
+    :param num_phrases: The number of phrases to generate
+    :param prompt: The prompt to use for the generation
+    :param loop: If True, the program will loop until the user presses Ctrl-C
+    """
     if language is not None:
         print(f"Language is {language}")
     if type_generation is not None:
@@ -21,21 +36,20 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     if prompt is not None:
         print(f"Prompt is {prompt}")
 
+    # ----------------------------------------------------------------
+
+    # Getting the value of the environment variable `OPENAI_API_KEY`
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
-    # ----------------------------------------------------------------
-    # * TODOS AND IDEAS *
-
-    # *idea: save generated answers in txt file or excel or so
-
-    # ----------------------------------------------------------------
     openai.api_key = OPENAI_API_KEY
 
     # ----------------------------------------------------------------
     def waiting_for_answer_animation(stop_event):
-        """This function prints a message for the user to know that the
-        answer is coming and the program is running. It uses time.sleep() to
-        create a simple animation of every character in the string.
+        """
+        It prints a message for the user to know that the answer is coming and the program is running. It
+        uses time.sleep() to create a simple animation of every character in the string
+
+        :param stop_event: This is the event that will be used to stop the thread
         """
         counter = 0
         wait_string = "answer is coming..."
@@ -45,16 +59,25 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         print()
 
     def generate_response(prompt):
+        """
+        It takes a prompt and returns a response
+
+        :param prompt: The prompt is the text that you want to generate a response to
+        :return: A string of text.
+        """
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=prompt,
+            # The maximum number of tokens that the model will generate.
             max_tokens=1000,
+            # The number of completions to return.
             n=1,
             stop=None,
             temperature=0.5,
         )
         return response.choices[0].text.strip()
 
+    # A dictionary that contains the languages that the user can choose from.
     languages = {
         "Catalan": "ca",
         "English": "en",
@@ -69,6 +92,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     # ----------------------------------------------------------------
     # MAIN LOOP
 
+    # Printing out the languages that the user can choose from.
     if language is None:
 
         def print_list_languages():
@@ -85,9 +109,18 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     print()  # blank line
 
     def ask_for_language(language=language):
+        """
+        If the language is not specified, ask the user for a language. If the language is specified,
+        return the language
+
+        :param language: The language to translate to
+        :return: The language code
+        """
         if language is None:
             lang = input("Language: ")
 
+        # Checking if the language code is in the dictionary and if it is, it is changing the value of lang to
+        # the language.
         for language, language_code in languages.items():
             if language_code == lang:
                 lang = language
@@ -95,6 +128,19 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         return lang
 
     def generator_choice():
+        """
+        It takes a dictionary of options and prints them out to the user.
+
+        The user then inputs a value and the function returns the key associated with that value.
+
+        The function is called in the main function.
+
+        The main function then calls the appropriate function based on the user's input.
+
+        :return: The user's choice of what to generate.
+        """
+
+        # A dictionary of options for the user to choose from.
         gen_opt = {
             "Noun Phrases": "np",
             "Common Collocations": "cc",
@@ -118,6 +164,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         print("-" * 60)  # terminal separator
 
+        # Taking the user input and matching it to the key in the dictionary.
         user_gen_opt = input(">>> ")
         for k, v in gen_opt.items():
             if user_gen_opt == v:
@@ -125,17 +172,26 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         return user_gen_opt
 
+    # ----------------------------------------------------------------
+
+    # Checking if the language is None. If it is, it will ask for the language. If it is not, it will
+    # set the language to the language that was passed in.
     lang = ""
     if language is None:
         lang = ask_for_language()
     else:
         lang = language
 
+    # ----------------------------------------------------------------
+
+    # Creating a loop that will run the program until the user decides to quit.
     program_run = True
 
     while program_run:
         print()  # space
 
+        # Checking if the type_generation is None. If it is, it will call the generator_choice()
+        # function. If it is not, it will set the gen_opt to type_generation.
         gen_opt = ""
         if type_generation is None:
             gen_opt = generator_choice()
@@ -151,6 +207,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         num_of_phrases = 0
 
+        # Asking the user to input a number of phrases to generate.
         if num_phrases is None:
             if not gen_opt in ("Short Story", "Translate"):
                 num_of_phrases = (
@@ -201,32 +258,38 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         # CHANGE THE PROMPT FOR CHATGPT ACCORDING
         # TO USER TYPE OF GENERATION CHOICE
 
+        # VERB CONJUGATION OPTION
         if gen_opt == "Verb Conjugation":
             tense = input("\nConjugation tense? \n>>> ")
 
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Conjugate this verb: '{user_prompt}' in {tense} and give me an example medium-large sentence for each personal pronoun, please. Make sure everything you give me is in {lang}"
 
+        # SHORT STORY OPTION
         elif gen_opt == "Short Story":
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and an excellent storyteller and you are teaching me this language. Use these words: '{user_prompt}'and create an interesting and fun short story that includes them. Make sure everything you give me is in {lang}"
 
+        # MAKE QUESTIONS OPTION
         elif gen_opt == "Questions":
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and  practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
 
+        # TRANSLATE OPTION
         elif gen_opt == "Translate":
             target_lang = input("\nInsert target language\n>>> ")
 
             chat_prompt = f"Act as if you were an amazing teacher and translator of {lang} and you are teaching me this language. Traslate these words or phrases into {target_lang}: '{user_prompt}' and give me 2 sentences examples sentences, first in {lang} and then in {target_lang}."
 
+        # COMMON COLLOCATIONS, NOUN PHRASES, ETC. OPTIONS
         else:
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
-
-        # waiting_for_answer_animation()
-
-        # response = generate_response(prompt)
 
         final_response = ""
 
         def response_func(stop_event):
+            """
+            It takes a string as input, and returns a string as output
+
+            :param stop_event: This is the event that will be used to stop the thread
+            """
             try:
                 response = generate_response(chat_prompt)
                 print()
@@ -262,9 +325,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         thread1.join()
         thread2.join()
         # ----------------------------------------------------------------
-        # response_func()
-
-        # print(f"[bold yellow]{response}[/bold yellow]")
 
         print("-" * 60)
 
