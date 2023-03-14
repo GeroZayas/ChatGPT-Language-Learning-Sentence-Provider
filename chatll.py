@@ -1,5 +1,5 @@
 import argparse
-from OpenAI_Language_Learning_Assistant import main
+from main import main
 
 # EXAMPLE
 # main(
