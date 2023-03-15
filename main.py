@@ -205,7 +205,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         # Asking the user to input a number of phrases to generate.
         if num_phrases is None:
-            if not gen_opt in ("Short Story", "Translate"):
+            if gen_opt not in ("Short Story", "Translate"):
                 num_of_phrases = (
                     pyip.inputNum(
                         "How many sentences (default np & cc = 10, ls = 3): ",
@@ -340,7 +340,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
                 )
                 user_choice = input(">>> ")
                 if user_choice == "ch":
-                    print_list_languages()
+                    print(f"[yellow]{languages_table}[/yellow]")
                     lang = ask_for_language()
                     program_run = True
                 elif user_choice == "q":
