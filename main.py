@@ -2,6 +2,7 @@ import os
 import time
 from rich import print
 import threading
+from prettytable import PrettyTable
 
 # A module that allows you to copy text to the clipboard.
 import pyperclip
@@ -87,22 +88,24 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         "Italian": "it",
     }
 
+    languages_table = PrettyTable()
+    languages_table.field_names = ["Language", "Lang. Code"]
+
+    for lang, lang_code in languages.items():
+        languages_table.add_row([lang, lang_code])
+
+    assert language is None, f"language is actually >>>> {language}"
+
+    languages_table.align = "c"
+    languages_table.padding_width = 2
+
     print("-" * 60)
 
     # ----------------------------------------------------------------
-    # MAIN LOOP
 
     # Printing out the languages that the user can choose from.
     if language is None:
-
-        def print_list_languages():
-            for lang, code in languages.items():
-                print(
-                    f"""
-                    {lang:<11} ->> {code}"""
-                )
-
-        print_list_languages()
+        print(f"[yellow]{languages_table}[/yellow]")
 
         print("\nChoose your language: ")
 
@@ -116,8 +119,8 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         :param language: The language to translate to
         :return: The language code
         """
-        if language is None:
-            lang = input("Language: ")
+
+        lang = input("Language: ")
 
         # Checking if the language code is in the dictionary and if it is, it is changing the value of lang to
         # the language.
@@ -177,11 +180,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     # Checking if the language is None. If it is, it will ask for the language. If it is not, it will
     # set the language to the language that was passed in.
     lang = ""
-    if language is None:
-        lang = ask_for_language()
-    else:
-        lang = language
-
+    lang = ask_for_language() if language is None else language
     # ----------------------------------------------------------------
 
     # Creating a loop that will run the program until the user decides to quit.
@@ -193,10 +192,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         # Checking if the type_generation is None. If it is, it will call the generator_choice()
         # function. If it is not, it will set the gen_opt to type_generation.
         gen_opt = ""
-        if type_generation is None:
-            gen_opt = generator_choice()
-        else:
-            gen_opt = type_generation
+        gen_opt = generator_choice() if type_generation is None else type_generation
 
         print()  # space
 
