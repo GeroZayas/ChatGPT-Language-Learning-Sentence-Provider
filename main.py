@@ -362,4 +362,13 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
 
 if __name__ == "__main__":
-    main()
+    import cProfile
+    import pstats
+
+    with cProfile.Profile() as pr:
+        main()
+
+    stats = pstats.Stats(pr)
+    stats.sort_stats(pstats.SortKey.TIME)
+    # stats.print_stats()
+    stats.dump_stats(filename="needs_profiling.prof")
