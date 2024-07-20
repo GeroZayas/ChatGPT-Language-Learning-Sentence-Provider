@@ -65,21 +65,24 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         print()
 
     def generate_response(prompt):
-        """
-        It takes a prompt and returns a response
-
-        :param prompt: The prompt is the text that you want to generate a response to
-        :return: A string of text.
-        """
-        response = client.completions.create(engine="text-davinci-003",
-        prompt=prompt,
-        # The maximum number of tokens that the model will generate.
-        max_tokens=1000,
-        # The number of completions to return.
-        n=1,
-        stop=None,
-        temperature=0.5)
-        return response.choices[0].text.strip()
+        """It takes a prompt and returns a response."""
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",  # Specify the GPT-4o Mini model
+                messages=[
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=1000,  # The maximum number of tokens that the model will generate
+                n=1,
+                stop=None,
+                temperature=0.5
+            )
+            
+            # Access the response correctly
+            return response.choices[0].message['content'].strip()
+        except Exception as e:
+            print(f"Error generating response: {e}")
+            return ""
 
     # A dictionary that contains the languages that the user can choose from.
     languages = {
