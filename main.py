@@ -3,25 +3,16 @@ import time
 from rich import print
 import threading
 from prettytable import PrettyTable
-
-# A module that allows you to copy text to the clipboard.
 import pyperclip
-
 from openai import OpenAI
-
-
-# A module that allows you to validate user input.
 import pyinputplus as pyip
-
-# Loading the environment variables from the .env file.
 from dotenv import load_dotenv
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
 client = OpenAI(api_key=OPENAI_API_KEY)
-    
+
 
 def main(language=None, type_generation=None, num_phrases=None, prompt=None, loop=None):
     """
@@ -42,14 +33,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     if prompt is not None:
         print(f"Prompt is {prompt}")
 
-    # ----------------------------------------------------------------
-
-    # Getting the value of the environment variable `OPENAI_API_KEY`
-    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-
-    
-
-    # ----------------------------------------------------------------
     def waiting_for_answer_animation(stop_event):
         """
         It prints a message for the user to know that the answer is coming and the program is running. It
@@ -64,13 +47,16 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             time.sleep(0.05)
         print()
 
+    
+    
     def generate_response(prompt):
         """It takes a prompt and returns a response."""
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",  # Specify the GPT-4o Mini model
                 messages=[
-                    {"role": "user", "content": prompt}
+                    {"role": "system", "content": "You are a helpful assistant."},  # System message for context
+                    {"role": "user", "content": prompt}  # User message for which the model will generate a response
                 ],
                 max_tokens=1000,  # The maximum number of tokens that the model will generate
                 n=1,
@@ -78,13 +64,13 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
                 temperature=0.5
             )
             
-            # Access the response correctly
-            return response.choices[0].message['content'].strip()
+            # Correctly access the response content
+            # print(response)
+            return response.choices[0].message.content.strip()
         except Exception as e:
             print(f"Error generating response: {e}")
             return ""
 
-    # A dictionary that contains the languages that the user can choose from.
     languages = {
         "Catalan": "ca",
         "English": "en",
@@ -107,9 +93,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
     print("-" * 60)
 
-    # ----------------------------------------------------------------
-
-    # Printing out the languages that the user can choose from.
     if language is None:
         print(f"[yellow]{languages_table}[/yellow]")
 
@@ -128,8 +111,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         lang = input("Language: ")
 
-        # Checking if the language code is in the dictionary and if it is, it is changing the value of lang to
-        # the language.
         for language, language_code in languages.items():
             if language_code == lang:
                 lang = language
@@ -149,7 +130,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         :return: The user's choice of what to generate.
         """
 
-        # A dictionary of options for the user to choose from.
         gen_opt = {
             "Noun Phrases": "np",
             "Common Collocations": "cc",
@@ -173,7 +153,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         print("-" * 60)  # terminal separator
 
-        # Taking the user input and matching it to the key in the dictionary.
         user_gen_opt = input(">>> ")
         for k, v in gen_opt.items():
             if user_gen_opt == v:
@@ -181,22 +160,14 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         return user_gen_opt
 
-    # ----------------------------------------------------------------
-
-    # Checking if the language is None. If it is, it will ask for the language. If it is not, it will
-    # set the language to the language that was passed in.
     lang = ""
     lang = ask_for_language() if language is None else language
-    # ----------------------------------------------------------------
 
-    # Creating a loop that will run the program until the user decides to quit.
     program_run = True
 
     while program_run:
         print()  # space
 
-        # Checking if the type_generation is None. If it is, it will call the generator_choice()
-        # function. If it is not, it will set the gen_opt to type_generation.
         gen_opt = ""
         gen_opt = generator_choice() if type_generation is None else type_generation
 
@@ -209,7 +180,6 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
         num_of_phrases = 0
 
-        # Asking the user to input a number of phrases to generate.
         if num_phrases is None:
             if gen_opt not in ("Short Story", "Translate"):
                 num_of_phrases = (
@@ -256,33 +226,24 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             else:
                 user_prompt = input("\nInsert word, phrase or verb: \n>>> ")
 
-        # ----------------------------------------------------------------
-        # CHANGE THE PROMPT FOR CHATGPT ACCORDING
-        # TO USER TYPE OF GENERATION CHOICE
-
-        # VERB CONJUGATION OPTION
         if gen_opt == "Verb Conjugation":
             tense = input("\nConjugation tense? \n>>> ")
 
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Conjugate this verb: '{user_prompt}' in {tense} and give me an example medium-large sentence for each personal pronoun, please. Make sure everything you give me is in {lang}"
 
-        # SHORT STORY OPTION
         elif gen_opt == "Short Story":
             chat_prompt = f"Act as if you were an amazing teacher of {lang} and an excellent storyteller and you are teaching me this language. Use these words: '{user_prompt}'and create an interesting and fun short story that includes them. Make sure everything you give me is in {lang}"
 
-        # MAKE QUESTIONS OPTION
         elif gen_opt == "Questions":
-            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and  practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Use these words: '{user_prompt}' and formulate interesting and fun questions to elicit in me varied answers and practice conversation using those words. Make sure everything you give me is in {lang}. The questions don't have to only about learning {lang}, they could be about daily life and different topics."
 
-        # TRANSLATE OPTION
         elif gen_opt == "Translate":
             target_lang = input("\nInsert target language\n>>> ")
 
             chat_prompt = f"Act as if you were an amazing teacher and translator of {lang} and you are teaching me this language. Traslate these words or phrases into {target_lang}: '{user_prompt}' and give me 2 sentences examples sentences, first in {lang} and then in {target_lang}."
 
-        # COMMON COLLOCATIONS, NOUN PHRASES, ETC. OPTIONS
         else:
-            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt}  in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
+            chat_prompt = f"Act as if you were an amazing teacher of {lang} and you are teaching me this language. Now you give me {num_of_phrases} {gen_opt} in {lang} with this word or phrase: '{user_prompt}' so I can learn it very well. Make sure everything you give me is in {lang}"
 
         final_response = ""
 
@@ -292,6 +253,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
             :param stop_event: This is the event that will be used to stop the thread
             """
+            nonlocal final_response
             try:
                 response = generate_response(chat_prompt)
                 print()
@@ -304,29 +266,19 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             except Exception:
                 print("Something went wrong!")
 
-        # ----------------------------------------------------------------
-        ###########
-        # THREADS #
-        ###########
-
-        # Create a shared event to signal the first thread to stop
         stop_event = threading.Event()
 
-        # Create threads for each function
         thread1 = threading.Thread(
             target=waiting_for_answer_animation, args=(stop_event,)
         )
         thread2 = threading.Thread(target=response_func, args=(stop_event,))
 
-        # Start both threads
         print()  # blank line - space
         thread1.start()
         thread2.start()
 
-        # Wait for both threads to finish before exiting
         thread1.join()
         thread2.join()
-        # ----------------------------------------------------------------
 
         print("-" * 60)
 
@@ -369,16 +321,3 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
 if __name__ == "__main__":
     main()
-
-    # ----------------------------------------------------------------
-    # ---PROFILING ---
-    # import cProfile
-    # import pstats
-
-    # with cProfile.Profile() as pr:
-    # main()
-
-    # stats = pstats.Stats(pr)
-    # stats.sort_stats(pstats.SortKey.TIME)
-    # stats.print_stats()
-    # stats.dump_stats(filename="needs_profiling.prof")
