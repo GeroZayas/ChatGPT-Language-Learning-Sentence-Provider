@@ -7,7 +7,8 @@ from prettytable import PrettyTable
 # A module that allows you to copy text to the clipboard.
 import pyperclip
 
-import openai
+from openai import OpenAI
+
 
 # A module that allows you to validate user input.
 import pyinputplus as pyip
@@ -17,6 +18,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+client = OpenAI(api_key=OPENAI_API_KEY)
+    
 
 def main(language=None, type_generation=None, num_phrases=None, prompt=None, loop=None):
     """
@@ -42,7 +47,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     # Getting the value of the environment variable `OPENAI_API_KEY`
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
-    openai.api_key = OPENAI_API_KEY
+    
 
     # ----------------------------------------------------------------
     def waiting_for_answer_animation(stop_event):
@@ -66,16 +71,14 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         :param prompt: The prompt is the text that you want to generate a response to
         :return: A string of text.
         """
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            # The maximum number of tokens that the model will generate.
-            max_tokens=1000,
-            # The number of completions to return.
-            n=1,
-            stop=None,
-            temperature=0.5,
-        )
+        response = client.completions.create(engine="text-davinci-003",
+        prompt=prompt,
+        # The maximum number of tokens that the model will generate.
+        max_tokens=1000,
+        # The number of completions to return.
+        n=1,
+        stop=None,
+        temperature=0.5)
         return response.choices[0].text.strip()
 
     # A dictionary that contains the languages that the user can choose from.
