@@ -27,11 +27,11 @@ To install the required dependencies, run the following command in your terminal
 
 1.  Clone the repository to your local machine.
 2.  Install the required packages using pip.
-3.  Add your OpenAI API key to the `.env` file.
+3.  Add your OpenAI API key to the `.env` file with the following name 'OPENAI_API_KEY'
 4.  Open the terminal and navigate to the directory where the program is located.
 5.  Run the program by typing `python main.py`.
 
-The program will prompt the user to select a language and the type of response they want to generate. The user inputs the desired information, and the program generates a response using the OpenAI API **text-davinci-003 model**.
+The program will prompt the user to select a language and the type of response they want to generate. The user inputs the desired information, and the program generates a response using the OpenAI API **gpt-4o-mini**.
 
 The output will be printed to the console and also copied to your clipboard.
 
