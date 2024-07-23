@@ -4,7 +4,7 @@ This program uses the OpenAI API to generate responses for language learning pur
 
 ### 📺 DEMO
 
-![GIF Demo of the App]("./static/OpenAI Language Learning Assistant SHOW.gif")
+<img src="./static/OpenAI Language Learning Assistant SHOW.gif" alt="GIF Video Demo of App" width="700" />
 
 ### 💪 Required:
 
