@@ -10,6 +10,8 @@ This program uses the OpenAI API to generate responses for language learning pur
 
 `OPENAI API KEY`
 
+➡️➡️➡️ [How to Get an OpenAI API Key](https://www.howtogeek.com/885918/how-to-get-an-openai-api-key/) ⬅️⬅️⬅️
+
 ### 💻 Installation and Dependencies
 
 This program requires 🐍 Python 3.6 or above and the following dependencies:
