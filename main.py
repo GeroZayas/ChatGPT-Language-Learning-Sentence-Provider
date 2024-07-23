@@ -47,23 +47,27 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             time.sleep(0.05)
         print()
 
-    
-    
     def generate_response(prompt):
         """It takes a prompt and returns a response."""
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",  # Specify the GPT-4o Mini model
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},  # System message for context
-                    {"role": "user", "content": prompt}  # User message for which the model will generate a response
+                    {
+                        "role": "system",
+                        "content": "You are a helpful assistant.",
+                    },  # System message for context
+                    {
+                        "role": "user",
+                        "content": prompt,
+                    },  # User message for which the model will generate a response
                 ],
                 max_tokens=1000,  # The maximum number of tokens that the model will generate
                 n=1,
                 stop=None,
-                temperature=0.5
+                temperature=0.5,
             )
-            
+
             # Correctly access the response content
             # print(response)
             return response.choices[0].message.content.strip()

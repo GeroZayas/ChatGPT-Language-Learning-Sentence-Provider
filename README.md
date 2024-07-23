@@ -4,9 +4,7 @@ This program uses the OpenAI API to generate responses for language learning pur
 
 ### 📺 DEMO
 
-<video width="640" height="360" controls>
-  <source src="./static/OpenAI Language Learning Assistant SHOW.mp4" type="video/webm">
-</video>
+![GIF Demo of the App]("./static/OpenAI Language Learning Assistant SHOW.gif")
 
 ### 💪 Required:
 
