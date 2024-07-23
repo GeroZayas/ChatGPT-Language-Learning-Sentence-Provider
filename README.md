@@ -2,6 +2,12 @@
 
 This program uses the OpenAI API to generate responses for language learning purposes. The user inputs a language and a word, phrase, or verb they want to learn more about, and the program generates responses in that language. The user can choose between different types of responses depending on their learning goals, such as noun phrases, verb conjugation, and short stories.
 
+### 📺 DEMO
+
+<video width="640" height="360" controls>
+  <source src="./static/OpenAI Language Learning Assistant SHOW.mp4" type="video/webm">
+</video>
+
 ### 💪 Required:
 
 `OPENAI API KEY`
