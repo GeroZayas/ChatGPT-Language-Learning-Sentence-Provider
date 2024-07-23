@@ -1,14 +1,14 @@
-# OpenAI Language Learning Assistant
+# 🗣️ OpenAI Language Learning Assistant
 
 This program uses the OpenAI API to generate responses for language learning purposes. The user inputs a language and a word, phrase, or verb they want to learn more about, and the program generates responses in that language. The user can choose between different types of responses depending on their learning goals, such as noun phrases, verb conjugation, and short stories.
 
-### Required:
+### 💪 Required:
 
 `OPENAI API KEY`
 
-### Installation and Dependencies
+### 💻 Installation and Dependencies
 
-This program requires Python 3.6 or above and the following dependencies:
+This program requires 🐍 Python 3.6 or above and the following dependencies:
 
 - os
 - time
@@ -23,7 +23,7 @@ To install the required dependencies, run the following command in your terminal
 
 `pip install -r requirements.txt`
 
-### Usage
+### 🧑‍💻 Usage
 
 1.  Clone the repository to your local machine.
 2.  Install the required packages using pip.
@@ -31,13 +31,13 @@ To install the required dependencies, run the following command in your terminal
 4.  Open the terminal and navigate to the directory where the program is located.
 5.  Run the program by typing `python main.py`.
 
-The program will prompt the user to select a language and the type of response they want to generate. The user inputs the desired information, and the program generates a response using the OpenAI API **gpt-4o-mini**.
+The program will prompt the user to select a language and the type of response they want to generate. The user inputs the desired information, and the program generates a response using the OpenAI API **gpt-4o-mini**. This new model (July 2024) is much better than previous ones, and significantly cheaper. [GPT-4o mini](https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/)
 
-The output will be printed to the console and also copied to your clipboard.
+The output will be printed to the console and also **copied** to your **clipboard** automatically.
 
 You can run the program multiple times and generate different types of language output.
 
-### Program Features
+### ➡️ Program Features
 
 The program has the following features:
 
@@ -49,7 +49,7 @@ The program has the following features:
 - Clipboard functionality: The generated response is automatically copied to the clipboard for easy access.
 - Program options: The program provides options to change the language, quit the program, and view more options.
 
-### Future Work
+### 💡 Future Work
 
 - Saving generated responses: A future feature could include the ability to save generated responses to a text file or Excel document.
 - Improved response accuracy: The program's response accuracy could be improved by using a more powerful OpenAI API plan or by implementing a machine learning model.
