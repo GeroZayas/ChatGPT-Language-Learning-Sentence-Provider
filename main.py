@@ -1,5 +1,6 @@
 import os
 import time
+from openai.types.chat.chat_completion import ChatCompletion
 from rich import print
 import threading
 from prettytable import PrettyTable
@@ -7,6 +8,8 @@ import pyperclip
 from openai import OpenAI
 import pyinputplus as pyip
 from dotenv import load_dotenv
+from logic import type_of_generation, ask_for_language
+from options import languages
 
 load_dotenv()
 
@@ -33,24 +36,24 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
     if prompt is not None:
         print(f"Prompt is {prompt}")
 
-    def waiting_for_answer_animation(stop_event):
+    def waiting_for_answer_animation(stop_event) -> None:
         """
         It prints a message for the user to know that the answer is coming and the program is running. It
         uses time.sleep() to create a simple animation of every character in the string
 
         :param stop_event: This is the event that will be used to stop the thread
         """
-        counter = 0
+        # counter = 0
         wait_string = "answer is coming..."
         for letter in wait_string:
             print(f"[bold red]{letter}[/bold red]", end="")
             time.sleep(0.05)
         print()
 
-    def generate_response(prompt):
+    def generate_response(prompt) -> str:
         """It takes a prompt and returns a response."""
         try:
-            response = client.chat.completions.create(
+            response: ChatCompletion = client.chat.completions.create(
                 model="gpt-4o-mini",  # Specify the GPT-4o Mini model
                 messages=[
                     {
@@ -75,14 +78,14 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
             print(f"Error generating response: {e}")
             return ""
 
-    languages = {
-        "Catalan": "ca",
-        "English": "en",
-        "German": "de",
-        "Spanish": "sp",
-        "Portuguese": "pt",
-        "Italian": "it",
-    }
+    # languages: dict[str, str] = {
+    #     "Catalan": "ca",
+    #     "English": "en",
+    #     "German": "de",
+    #     "Spanish": "sp",
+    #     "Portuguese": "pt",
+    #     "Italian": "it",
+    # }
 
     languages_table = PrettyTable()
     languages_table.field_names = ["Language", "Lang. Code"]
@@ -104,68 +107,12 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
 
     print()  # blank line
 
-    def ask_for_language(language=language):
-        """
-        If the language is not specified, ask the user for a language. If the language is specified,
-        return the language
+    # ask_for_language()
 
-        :param language: The language to translate to
-        :return: The language code
-        """
-
-        lang = input("Language: ")
-
-        for language, language_code in languages.items():
-            if language_code == lang:
-                lang = language
-
-        return lang
-
-    def generator_choice():
-        """
-        It takes a dictionary of options and prints them out to the user.
-
-        The user then inputs a value and the function returns the key associated with that value.
-
-        The function is called in the main function.
-
-        The main function then calls the appropriate function based on the user's input.
-
-        :return: The user's choice of what to generate.
-        """
-
-        gen_opt = {
-            "Noun Phrases": "np",
-            "Common Collocations": "cc",
-            "Long Sentences": "ls",
-            "Verb Conjugation": "vc",
-            "Short Story": "ss",
-            "Questions": "q",
-            "Translate": "t",
-        }
-
-        print(
-            """
-              Select what you want to generate:
-              """
-        )
-
-        for k, v in gen_opt.items():
-            print("-" * 60)  # terminal separator
-            print(f"For '{k}' insert '{v}'")
-            time.sleep(0.1)
-
-        print("-" * 60)  # terminal separator
-
-        user_gen_opt = input(">>> ")
-        for k, v in gen_opt.items():
-            if user_gen_opt == v:
-                user_gen_opt = k
-
-        return user_gen_opt
+    # generator_choice()
 
     lang = ""
-    lang = ask_for_language() if language is None else language
+    lang = ask_for_language(language) if language is None else language
 
     program_run = True
 
@@ -173,7 +120,7 @@ def main(language=None, type_generation=None, num_phrases=None, prompt=None, loo
         print()  # space
 
         gen_opt = ""
-        gen_opt = generator_choice() if type_generation is None else type_generation
+        gen_opt = type_of_generation() if type_generation is None else type_generation
 
         print()  # space
 
